@@ -119,6 +119,10 @@ obj-$(CONFIG_VIDEO_IMX477) += imx477.o
 make ARCH=arm64 imx_v8_defconfig
 ```
 
+Or maybe the generic one ? (if it is generic at all : `imx`
+
+Or this one? : https://github.com/RobertCNelson/u-boot/blob/master/configs/imx8mp_evk_defconfig 
+
 Open kernel configuration:
 
 ```bash
