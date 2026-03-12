@@ -1,0 +1,45 @@
+tarball the build
+tar czf archive_name.tar.gz --exclude='archive_name.tar.gz' ./build/
+
+send to target over ssh
+scp -r archive_name.tar.gz debix@172.25.12.27:/home/debix/newkernel
+
+ON TARGET DEBIX MODEL B
+
+decompress tarball
+tar -xf archive_name.tar.gz -C kernel/
+
+copy build image into board /arch/arm64/boot/Image
+sudo cp /arch/arm64/boot/Image /boot/
+
+Figure out the dts used by the system:
+cat /proc/device-tree/model
+-> NXP i.MX8MPlus EVK board
+
+copy corrosponding dts into /boot/
+sudo cp arch/arm64/boot/dts/freescale/imx8mp-evk.dtb /boot/imx8mp-evk.dtb
+
+install kernel modules
+Copy everything from ./modules/lib/modules/<kernel-version>/ to /lib/modules/<kernel-version>/ on the target.
+sudo cp -r ./modules/lib/modules/6.12.49-gdf24f9428e38-dirty/ /lib/modules/
+
+update kernel modules deirectory. run 
+sudo depmod -a
+This step is crucial for sensor drivers (like IMX477 if built as a module), rkisp1, and V4L2 components.
+
+
+CHECK bootloader configurations
+
+Access the U-Boot Console by rebooting, SO REBOOT, and pressing any key during early boot, to interupt autoboot
+
+[And i fucked it up]
+
+(i think to get into uBoot you need to hold down a key when booting)
+Check Current Environment Variables: at U-Boot prompt run: printenv
+Look for variables like:
+    bootcmd
+    bootargs
+    bootm/booti/loadaddr/fdt_addr/kernel_addr
+    Anything with /boot/Image or /boot/<your-dtb>.dtb
+
+look at bootcmd, odes it use the right image and dtb?
