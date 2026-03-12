@@ -191,6 +191,8 @@ CONFIG_VIDEO_IMX477=y
 
 Ensure build dependencies are installed (gcc/clang, make, bison, flex, openssl-dev, elfutils, etc.).
 
+We are goiung to compile the kernel image, modules (if enabled as `<M>`), and device tree binary files (dtbs).
+
 ### Compile on the board
 
 ```bash
